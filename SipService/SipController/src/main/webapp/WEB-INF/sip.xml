@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sip-app xmlns="http://www.jcp.org/xml/ns/sipservlet"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+         version="1.1">
+
+    <app-name>SipController</app-name>
+
+    <distributable/>
+
+    <servlet-selection>
+        <main-servlet>SipController</main-servlet>
+    </servlet-selection>
+
+    <servlet>
+        <javaee:servlet-name>SipController</javaee:servlet-name>
+        <javaee:display-name>SipController</javaee:display-name>
+        <javaee:servlet-class>controller.SipController</javaee:servlet-class>
+        <javaee:load-on-startup>1</javaee:load-on-startup>
+    </servlet>
+
+    <listener>
+        <javaee:listener-class>controller.SipController</javaee:listener-class>
+        <javaee:display-name>SipControllerSipListener</javaee:display-name>
+    </listener>
+
+</sip-app>

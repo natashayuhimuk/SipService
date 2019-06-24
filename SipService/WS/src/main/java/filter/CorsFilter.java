@@ -1,0 +1,36 @@
+package filter;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class CorsFilter implements Filter {
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", "*");
+        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST");
+        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers", "Origin, Accept, x-requested-with," +
+                " Content-Type, SOAPAction, Access-Control-Allow-Headers, Access-Control-Response-Headers," +
+                " Access-Control-Allow-Methods, Access-Control-Allow-Origin, user-agent");
+
+        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+        if (request.getMethod().equals("OPTIONS")) {
+            resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+            return;
+        }
+        filterChain.doFilter(request, servletResponse);
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+}

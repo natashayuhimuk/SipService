@@ -1,0 +1,50 @@
+MW_HOME = C:\Oracle\Middleware
+
+Update mysql driver in weblogic:
+1)	Download mysql driver:
+https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.1.47.zip
+
+2) Unzip and rename:
+mysql-connector-java-5.1.47-bin.jar -> mysql-connector-java-commercial-5.1.17-bin
+
+3)	Insert with the replacement of the renamed archive to:
+MW_HOME\wlserver_10.3\server\lib\
+
+
+Install hibernate to WebLogic guide:
+1)	add to file -> MW_HOME\wlserver_10.3\common\bin\setPatchEnv.cmd:
+Windows:
+SET PRE_CLASSPATH=%PRE_CLASSPATH%;%MW_HOME%\modules\com.oracle.jpa2support_1.0.0.0_2-1.jar;%MW_HOME%\modules\javax.persistence_1.1.0.0_2-0.jar
+Linux:
+PRE_CLASSPATH="${PRE_CLASSPATH}:${MW_HOME}/modules/com.oracle.jpa2support_1.0.0.0_2-1.jar:${MW_HOME}/modules/javax.persistence_1.1.0.0_2-0.jar"
+export PRE_CLASSPATH
+
+2)	create script and run(Windows(.bat), Unix(.sh)):
+Windows:
+@echo off
+if ".%1" == "." goto TellSyntax
+set wls_modules=%1
+set PRE_CLASSPATH=%wls_modules%\javax.persistence_1.0.0.0_2-0-0.jar;
+%wls_modules%\com.oracle.jpa2support_1.0.0.0_2-0.jar
+goto End
+:TellSyntax
+echo setJPA2SupportPatch [path-to-weblogic-modules-directory
+:End
+echo PRE_CLASSPATH=%PRE_CLASSPATH%
+
+
+3)	Download javax.persistence-2.1
+http://www.java2s.com/Code/JarDownload/javax.persistence/javax.persistence-2.1.0-rc1.jar.zip
+
+4)	Unzip downloaded arhive and rename:
+javax.persistence-2.1.0-rc1.jar -> javax.persistence_1.1.0.0_2-0.jar
+
+5)	Insert with the replacement of the renamed archive to the dir:
+MW_HOME\modules\
+
+6)	Download, unzip and copy all files to MW_HOME\user_projects\domains\base_domain\lib\ :
+https://yadi.sk/d/m5zFO6uEHHV2kg
+
+Set jdbc datasource to weblogic:
+
+1)  https://bsdmag.org/configuring-jdbc-oracle-weblogic-server/

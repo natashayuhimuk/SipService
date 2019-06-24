@@ -1,0 +1,69 @@
+#!/bin/bash
+mainCatalogName="test_$(date)"
+count=0
+
+mkdir "$mainCatalogName"
+echo "START TESTING"
+echo "-------------------------------------------------------------------------------"
+mkdir "$mainCatalogName"/FaildTests
+mkdir "$mainCatalogName"/Tests
+
+function createDirectory {
+(( count++ ))
+mkdir "$mainCatalogName"/Tests/test_$csvFile
+touch "$mainCatalogName"/Tests/test_$csvFile/result.txt
+}
+
+function movingLogsToFolder {
+if [[ -e uas_messages.log || -e uac_messages.log ]];
+then
+mv *messages.log "$mainCatalogName"/Tests/test_$csvFile
+fi
+
+if [[ -e uas_error.log || -e uac_error.log ]];
+then
+errors=1
+mv *error.log "$mainCatalogName"/Tests/test_$csvFile
+echo TestFaild
+else
+errors=0
+echo TestPassed
+fi
+}
+
+function testValidation {
+
+if [[ $uasExitCod -eq 99 && $uacExitCod -eq 0 && $errors -eq 0 ]]
+then
+echo "0" > "$mainCatalogName"/Tests/test_$csvFile/result.txt
+echo "-------------------------------------------------------------------------------"
+else
+echo "1" > "$mainCatalogName"/Tests/test_$csvFile/result.txt
+echo "-------------------------------------------------------------------------------"
+fi
+}
+
+function movingFaildTestToFolder {
+if grep -q '1' "$mainCatalogName"/Tests/test_$csvFile/result.txt
+then
+cp -r "$mainCatalogName"/Tests/test_$csvFile  "$mainCatalogName"/FaildTests
+fi
+}
+
+while read uas && read uac && read csvFile
+do
+createDirectory
+echo "Start $csvFile $count test"
+./sipp -bg -sf $uas -m 1 -nr -p 5066 -i 127.0.0.1 -rsa 127.0.0.1:5060 -trace_msg -message_file uas_messages.log -trace_err -error_file uas_error.log > /dev/null
+uasExitCod=$?
+./sipp -sf $uac -m 1 -inf $csvFile -p 5065 -trace_msg -message_file uac_messages.log -trace_err -error_file uac_error.log -i 127.0.0.1 -rsa 127.0.0.1:5060 127.0.0.1:5066 > /dev/null
+uacExitCod=$?
+sleep 1
+tail -n 15 /home/igor/Oracle/Middleware/user_projects/domains/base_domain/sipservice-log.log
+sleep 2
+killall -9 sipp &> /dev/null
+movingLogsToFolder
+testValidation
+movingFaildTestToFolder
+done < "sipp_console"
+

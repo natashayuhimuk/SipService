@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
+           version="2.0">
+
+    <endpoint name="TariffService"
+              implementation="services.Impl.TariffServiceImpl"
+              url-pattern="/tariff"
+    />
+    <endpoint name="UserService"
+              implementation="services.Impl.UserServiceImpl"
+              url-pattern="/user"
+    />
+    <endpoint
+            name="StatisticService"
+            implementation="services.Impl.StatisticServiceImpl"
+            url-pattern="/stat"
+    />
+    <endpoint
+            name="ConfigurationService"
+            implementation="services.Impl.ConfigurationServiceImpl"
+            url-pattern="/conf"
+    />
+    <endpoint
+            name="BlackListService"
+            implementation="services.Impl.BlackListServiceImpl"
+            url-pattern="/blacklist"
+    />
+    <endpoint
+            name="AuthorizationService"
+            implementation="services.Impl.AuthorizationServiceImpl"
+            url-pattern="/auth"
+    />
+
+</endpoints>

@@ -1,0 +1,2 @@
+cd C:\Oracle\Middleware\wlserver_10.3\server\lib
+java -cp weblogic.jar weblogic.Deployer -verbose -noexit -adminurl http://localhost:7001/ -username weblogic -password 12345678 -name sipservice -source c:/users/poof-/Desktop/SipService.ear -upload -redeploy -timeout 300
